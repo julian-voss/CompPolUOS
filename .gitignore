@@ -47,3 +47,4 @@ po/*~
 
 # RStudio Connect folder
 rsconnect/
+data-raw/politbarometer/ZA2391_v15-2-0.dta
