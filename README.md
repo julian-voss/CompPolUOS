@@ -4,6 +4,7 @@
 To install:
 
 ``` r
+devtools::install_github("julian-voss/CompPolUOS")
 ```
 
 

@@ -1,0 +1,11 @@
+Package: CompPolUOS
+Type: Package
+Title: Comparative Politics Datasets for UOS Course
+Version: 0.1.0
+Author: Julian Voss
+Maintainer: Julian Voss <julian.voss@uni-osnabrueck.de>
+Description: Companion package for a university course. Includes cleaned datasets for use in exercises.
+License: MIT
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.3.2

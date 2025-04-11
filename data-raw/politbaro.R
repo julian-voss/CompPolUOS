@@ -3,7 +3,7 @@ library(haven)
 library(sjlabelled)
 
 politbaro <-
-  haven::read_dta("./CompPolUOS/data-raw/politbarometer/ZA2391_v15-2-0.dta") %>%
+  haven::read_dta("./data-raw/politbarometer/ZA2391_v15-2-0.dta") %>%
   # Rename
   rename(
     studiennummer = v1,
@@ -129,10 +129,10 @@ stetige_variablen <- c(
   "gewicht_faktor"
 )
 
-politbaro_reduced <-
+politbaro <-
   select(politbaro, all_of(stetige_variablen))
 
-save(politbaro_reduced, file = "./CompPolUOS/data/politbaro.rda")
+save(politbaro, file = "./data-raw/politbaro.rda")
 
 # Create a long data frame with variable, value, and label
 label_df <- map_dfr(
