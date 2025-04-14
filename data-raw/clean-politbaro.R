@@ -169,4 +169,4 @@ recode_missing_labels <- function(x) {
 
 politbaro <- mutate(politbaro, across(wahlbeteiligung_absicht:gemeindegroesse, recode_missing_labels))
 
-save(politbaro, file = "./data-raw/politbaro.rda")
+save(politbaro, file = "./data/politbaro.rda")
