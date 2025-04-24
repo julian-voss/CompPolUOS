@@ -1,0 +1,18 @@
+---
+title: "Codebook zum Politbarometer-Datensatz (bearbeitet)"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Codebook zum Politbarometer}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE
+)
+```
+
+# Codebook
