@@ -6,12 +6,12 @@ library(sjlabelled)
 
 politbaro <-
   haven::read_dta("./data-raw/politbarometer/ZA2391_v15-2-0.dta", encoding = "utf-8") %>%
+  select(-c(v1, v2, v79, Version, doi)) %>%
   # Rename
   rename(
-    studiennummer = v1,
-    befragtennummer = v2,
     erhebungsmonat = v3,
     erhebungsjahr = v4,
+    erhebungswoche = v80,
     erhebungsgebiet = V4a,
     wahlbeteiligung_absicht = v5,
     parteienwahl_absicht = v6,
@@ -21,7 +21,7 @@ politbaro <-
     skalom_csu = v10,
     skalom_fdp = v11,
     skalom_gruene = v12,
-    skalom_republikaner = v13,
+    skalom_republikaner_afd = v13,
     skalom_pds = v14,
     skalom_regierung = v15,
     skalom_opposition = v16,
@@ -30,7 +30,7 @@ politbaro <-
     vertrauen_fuehrungspersonal = v19,
     politikinteresse = v20,
     politikinteresse_staerke = v21,
-    links_rechts_selbsteinstufung = v22,
+    links_rechts = v22,
     linksorientierung = v23,
     rechtsorientierung = v24,
     beurteilung_wirtschaft_brd = v25,
@@ -86,10 +86,8 @@ politbaro <-
     bundesland = v75,
     ortsgroesse = v76,
     gemeindegroesse = v77,
-    gewicht_faktor = v78,
-    versionskennung = v79,
-    erhebungswoche = v80,
-    version = V81)
+    repräsentatativgewicht = v78,
+    gesamtgewicht = V81)
 
 recode_missing_labels <- function(x) {
   na_labels <- c("nicht erhoben", "weiß nicht", "KA", "KA, verweigert", "KA, TNZ", "TNZ", "TNZ/nicht erhoben",
@@ -172,6 +170,74 @@ politbaro <- politbaro %>%
       ),
       ordered = TRUE
     ),
+    demokratiezufriedenheit = case_when(
+      demokratiezufriedenheit == 1 | demokratiezufriedenheit == 2 ~ 1,
+      demokratiezufriedenheit == 3 | demokratiezufriedenheit == 4 ~ 0
+    ),
+    demokratiezufriedenheit = labelled(
+      demokratiezufriedenheit,
+      labels = c("sehr zufrieden/eher zufrieden" = 1, "eher unzufrieden/sehr unzufrieden" = 0)
+    ),
+    politikinteresse_staerke = case_when(
+      politikinteresse_staerke %in% 1:2 ~ 1,
+      politikinteresse_staerke %in% 3:5 ~ 0
+    ),
+    politikinteresse_staerke = labelled(
+      politikinteresse_staerke,
+      labels = c("sehr stark/stark" = 1, "nicht so stark/etwas/kaum" = 0)
+    ),
+    # Harmonisierte Variable erstellen (0 = links, 1 = Mitte, 2 = rechts)
+    links_rechts_harmonisiert = case_when(
+      links_rechts %in% 1:5 ~ 0,     # eher links
+      links_rechts == 6 ~ 1,         # Mitte
+      links_rechts %in% 7:11 ~ 2,    # eher rechts
+      TRUE ~ NA_real_
+    ),
+    
+    # Labels hinzufügen
+    links_rechts_harmonisiert = labelled(
+      links_rechts_harmonisiert,
+      labels = c(
+        "eher links" = 0,
+        "Mitte" = 1,
+        "eher rechts" = 2
+      )
+    ),
+    links_rechts = if_else(
+      erhebungsjahr %in% 1989:1996,
+      NA_real_,
+      links_rechts
+    ),
+    beurteilung_wirtschaft_brd = case_when(
+      beurteilung_wirtschaft_brd %in% c(1, 2) ~ 2,  # (sehr) gut
+      beurteilung_wirtschaft_brd == 3         ~ 1,  # teils/teils
+      beurteilung_wirtschaft_brd %in% c(4, 5) ~ 0,  # (sehr) schlecht
+      TRUE                                    ~ NA_real_
+    ),
+    
+    beurteilung_wirtschaft_brd = labelled(
+      beurteilung_wirtschaft_brd,
+      labels = c(
+        "schlecht / sehr schlecht" = 0,
+        "teils-teils"              = 1,
+        "gut / sehr gut"           = 2
+      )
+    ),
+    wirtschaftslage_brd_1jahr = case_when(
+      wirtschaftslage_brd_1jahr %in% c(1, 2) ~ 2,  # besser
+      wirtschaftslage_brd_1jahr == 3         ~ 1,  # gleichbleibend
+      wirtschaftslage_brd_1jahr %in% c(4, 5) ~ 0,  # schlechter
+      TRUE                                   ~ NA_real_
+    ),
+    
+    wirtschaftslage_brd_1jahr = labelled(
+      wirtschaftslage_brd_1jahr,
+      labels = c(
+        "schlechter"     = 0,
+        "gleichbleibend" = 1,
+        "besser"         = 2
+      )
+    ),
     parteiID_spd        = if_else(parteineigung == 1, 1L, 0L, missing = NA_integer_),
     parteiID_cducsu     = if_else(parteineigung %in% c(2, 3, 4), 1L, 0L, missing = NA_integer_),  # merged CDU + CSU
     parteiID_fdp        = if_else(parteineigung == 5, 1L, 0L, missing = NA_integer_),
@@ -185,53 +251,25 @@ politbaro <- politbaro %>%
     wahl_gruene = if_else(parteienwahl_absicht %in% c(4, 43), 1L, 0L, missing = NA_integer_),
     wahl_linke  = if_else(parteienwahl_absicht %in% c(6, 34), 1L, 0L, missing = NA_integer_),
     wahl_afd    = if_else(parteienwahl_absicht == 49, 1L, 0L, missing = NA_integer_)
-  )
+  ) %>%
+  select(-schulabschluss_9kat, -schulabschluss_5kat) %>%
+  relocate(wahl_spd:wahl_afd, .after = parteienwahl_absicht) %>%
+  relocate(parteineigung, matches("parteiID_"), .after = wahl_rueckerinnerung) %>%
+  relocate(matches("links_rechts"), .after = politikinteresse_staerke) %>%
+  select(-c(linksorientierung, rechtsorientierung, beurteilung_wiedervereinigung:wichtigstes_problem_2))
 
-# ## Subset consistent variables
-# 
-# stetige_variablen <- c(
-#   "studiennummer",
-#   "befragtennummer",
-#   "erhebungsmonat",
-#   "erhebungsjahr",
-#   "wahlbeteiligung_absicht",
-#   "parteienwahl_absicht",
-#   "wahl_rueckerinnerung",
-#   "skalom_spd",
-#   "skalom_cdu",
-#   "skalom_csu",
-#   "skalom_fdp",
-#   "skalom_gruene",
-#   "skalom_regierung",
-#   "skalom_opposition",
-#   "demokratiezufriedenheit",
-#   "vertrauen_fuehrungspersonal",
-#   "links_rechts_selbsteinstufung",
-#   "beurteilung_wirtschaft_brd",
-#   "wirtschaftslage_brd_1jahr",
-#   "eigene_wirtschaftslage",
-#   "eigene_wirtschaftslage_1jahr",
-#   "wichtigstes_problem_1",
-#   "wichtigstes_problem_2",
-#   "kompetenz_arbeitsmarkt",
-#   "kompetenz_wirtschaft",
-#   "kompetenz_umweltschutz",
-#   "kompetenz_renten",
-#   "geschlecht",
-#   "alter_kategorien",
-#   "familienstand",
-#   "berufstaetigkeit",
-#   "berufsgruppe",
-#   "parteineigung",
-#   "staerke_parteineigung",
-#   "bundesland",
-#   "gemeindegroesse"
-#   # "gewicht_faktor"
-# )
-# 
-# politbaro <-
-#   select(politbaro, all_of(stetige_variablen))
-# 
+
+politbaro$erhebungsmonat_date <- as.Date(paste(politbaro$erhebungsjahr, politbaro$erhebungsmonat, "01", sep = "-"))
+
+politbaro <- politbaro %>%
+  mutate(wahl_gruene = ifelse(erhebungsmonat_date <= as.Date("1979-10-01"), NA, wahl_gruene),
+         wahl_linke = ifelse(erhebungsmonat_date <= as.Date("1990-09-01"), NA, wahl_linke),
+         wahl_afd = ifelse(erhebungsmonat_date <= as.Date("2014-01-01"), NA, wahl_afd),
+         
+         parteiID_gruene = ifelse(erhebungsmonat_date < as.Date("1982-06-01"), NA, parteiID_gruene),
+         parteiID_linke = ifelse(erhebungsmonat_date < as.Date("1991-01-01"), NA, parteiID_linke),
+         parteiID_afd = ifelse(erhebungsmonat_date < as.Date("2016-01-01"), NA, parteiID_afd)
+         )
 
 
 save(politbaro, file = "./data/politbaro.rda")

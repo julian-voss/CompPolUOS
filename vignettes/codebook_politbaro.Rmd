@@ -1,5 +1,5 @@
 ---
-title: "codebook_politbaro"
+title: "Politbarometer Codebook"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{codebook_politbaro}
@@ -14,6 +14,431 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
-library(CompPolUOS)
-```
+Das Codebook enthält Variableninformationen bezüglich der im Paket `CompPolUOS`
+enthaltenen Version des Politbarometers. Datenbasis ist der folgende Datensatz:
+
+Forschungsgruppe Wahlen, Mannheim (2025). Politbarometer 1977-2023 (Partielle Kumulation). GESIS, Köln. ZA2391 Datenfile Version 16.0.0, https://doi.org/10.4232/1.14494.
+
+## Struktur der Variableninformationen
+
+Jede Variable wird in folgender Form dargestellt:
+
+`Variablenname` (`Name im Originaldatensatz`)
+
+- **Fragetext/Inhalt** – Wortlaut der Frage bzw. Informationsgehalt
+- **Verfügbare Jahre** – Erhebungsjahre
+- **Antwort-Codes** – Kodierungen nach Bereinigung
+
+---
+
+## `wahlbeteiligung_absicht` (`v5`)
+
+**Fragetext/Inhalt:**  
+Wenn am nächsten Sonntag Bundestagswahl wäre, würden Sie dann zur Wahl gehen?  
+*(Formulierungen variierten je nach Jahr, Region und Wahlkontext)*
+
+> In den Jahren 1977–1993 sowie in spezifischen Monaten der Jahre 1994–2005 und ab 2006:  
+> *"Wenn am nächsten Sonntag Bundestagswahl wäre, würden Sie dann zur Wahl gehen?"*  
+>
+> In verschiedenen Wahljahren wurde die Frage angepasst, z. B.:  
+> *"Am [Datum] ist Bundestagswahl; werden Sie dann ...?"*  
+>
+> In Ostdeutschland 1990 u. a.:  
+> *"Wenn am nächsten Sonntag wieder Wahl zur Volkskammer wäre, würden Sie dann zur Wahl gehen?"*
+
+**Verfügbare Jahre:**  
+1977–2022
+
+**Antwort-Codes:**  
+- `1` = ja  
+- `2` = wahrscheinlich  
+- `3` = wahrscheinlich nicht  
+- `4` = nein  
+- `5` = Briefwahl gemacht  
+- `NA` = keine Angabe / nicht erhoben / verweigert
+
+## `parteienwahl_absicht` (`v6`)
+
+**Fragetext/Inhalt:**  
+(Falls die/der Befragte die Wahlteilnahme nicht ausschließt)  
+Welche Partei würden Sie dann wählen?
+
+> In 2010 bis 2020 und 2022 lautete die Frage:  
+> *Und welche Partei würden Sie wählen?*  
+>  
+> In der Blitzumfrage (09) Ost:  
+> *Welche Partei werden Sie wählen (bereits Briefwahl: Welche Partei haben Sie gewählt?)*  
+>  
+> In 2005 Ost:  
+> *Und welche Partei würden Sie dann wählen/haben Sie gewählt?*  
+>  
+> In 2021:  
+> *Und welche Partei werden Sie wählen? (falls die/der Befragte bereits gewählt hat: Wen haben Sie gewählt?)*
+
+**Verfügbare Jahre:**  
+1977–2022
+
+**Antwort-Codes:**  
+- `1` = CDU  
+- `2` = SPD  
+- `3` = FDP  
+- `4` = Grüne  
+- `5` = Republikaner  
+- `6` = PDS / Die Linke  
+- `7` = ÖDP  
+- `8` = NPD  
+- `9` = DVU  
+- `10` = Graue Panther  
+- `11` = DKP  
+- `12` = GLU  
+- `13` = GAZ  
+- `14` = Bürgerpartei  
+- `15` = Statt-Partei  
+- `16` = Bund Freier Bürger  
+- `18` = andere Partei  
+- `19` = Pro DM  
+- `20` = Schill-Partei  
+- `21` = Tierschutzpartei  
+- `22` = PBC  
+- `23` = Feministische Partei  
+- `24` = Bayernpartei  
+- `25` = Familien-Partei  
+- `26` = Christliche Mitte  
+- `27` = Bürgerrechtsbewegung Solidarität (BüSo)  
+- `29` = Die Violetten Alternativen  
+- `31` = Zentrumspartei  
+- `34` = WASG  
+- `35` = MLPD  
+- `36` = PSG  
+- `37` = Allianz der Mitte  
+- `38` = Freie Wähler Deutschlands  
+- `39` = Piratenpartei  
+- `40` = Rentnerpartei  
+- `41` = RRP  
+- `43` = Bündnis 90  
+- `44` = DSU  
+- `45` = DA  
+- `46` = DBD  
+- `47` = NDPD  
+- `48` = Neues Forum  
+- `49` = AfD  
+- `50` = ALFA  
+- `51` = Die Partei  
+- `52` = Widerstand 2020  
+- `53` = Volt  
+- `54` = die Basis  
+- `96` = wähle ungültig  
+- `NA` = keine Angabe / nicht erhoben / verweigert
+
+
+## `wahl_spd`, `wahl_cducsu`, `wahl_fdp`, `wahl_gruene`, `wahl_linke`, `wahl_afd` (alle aus `v6`)
+
+**Fragetext/Inhalt:**  
+Welche Partei würden Sie dann wählen?  
+*(Siehe `parteienwahl_absicht` für ausführliche Varianten des Fragetextes je nach Jahr)*
+
+**Verfügbare Jahre:**  
+- `wahl_spd`, `wahl_cducsu`, `wahl_fdp`: 1977–2022  
+- `wahl_gruene`: 1979–2022  
+- `wahl_linke`: 1990–2022  
+- `wahl_afd`: 2014–2022
+
+**Antwort-Codes:**  
+- `1` = Partei wurde genannt  
+- `0` = andere Partei genannt  
+- `NA` = keine Angabe / nicht erhoben
+
+**Hinweis:**  
+Die Variablen sind Dummy-Codierungen basierend auf der Parteinennung in `parteienwahl_absicht`. Sie erleichtern parteispezifische Analysen. Für detaillierte Antwortoptionen siehe `parteienwahl_absicht` (`v6`).
+
+## `wahl_rueckerinnerung` (`v7`)
+
+**Fragetext/Inhalt:**  
+Welche Partei haben Sie bei der jeweils letzten Bundestagswahl gewählt?  
+*(Die genaue Formulierung variierte je nach Wahljahr und Erhebungszeitpunkt.)*
+
+**Verfügbare Jahre:**  
+1977–2022
+
+**Antwort-Codes:**  
+- `1` = CDU  
+- `2` = SPD  
+- `3` = FDP  
+- `4` = Die Grünen  
+- `5` = Bündnis 90  
+- `6` = PDS / Linke Liste  
+- `7` = DKP  
+- `8` = NPD  
+- `9` = DSU  
+- `10` = DA  
+- `11` = DBD  
+- `12` = AfD (vormals NDPD)  
+- `13` = Republikaner  
+- `14` = Die Grauen (Panther)  
+- `15` = ÖDP  
+- `16` = Neues Forum  
+- `17` = STATT-Partei / Piratenpartei  
+- `18` = DVU  
+- `19` = Pro DM  
+- `20` = Bund Freier Bürger  
+- `21` = Schill-Partei / Freie Wähler  
+- `22` = Andere Partei  
+- `23` = Habe nicht gewählt  
+- `24` = War nicht wahlberechtigt  
+- `97` = verweigert  
+- `NA` = keine Angabe / nicht erhoben
+
+
+## `parteineigung` (`v72`)
+
+**Fragetext/Inhalt:**  
+In der Bundesrepublik / Deutschland neigen viele Leute längere Zeit einer bestimmten politischen Partei zu, obwohl sie auch ab und zu eine andere Partei wählen.  
+Wie ist das bei Ihnen: Neigen Sie – ganz allgemein gesprochen – einer bestimmten Partei zu?  
+*(Wenn ja, welcher? Nicht vorlesen!)*
+
+**Verfügbare Jahre:**  
+1977–2022
+
+**Antwort-Codes:**  
+- `1` = SPD  
+- `2` = CDU  
+- `3` = CDU/CSU  
+- `4` = CSU  
+- `5` = FDP  
+- `6` = Die Grünen  
+- `7` = NPD / DVU / Republikaner  
+- `8` = PDS / Die Linke  
+- `9` = andere Partei  
+- `10` = nein, keine Parteineigung  
+- `11` = AfD  
+- `12` = Bündnis 90  
+- `NA` = keine Angabe / nicht erhoben
+
+
+## `parteiID_spd`, `parteiID_cducsu`, `parteiID_fdp`, `parteiID_gruene`, `parteiID_linke`, `parteiID_afd` (alle aus `v72`)
+
+**Fragetext/Inhalt:**  
+Neigen Sie – ganz allgemein gesprochen – einer bestimmten Partei zu?
+
+**Verfügbare Jahre:**  
+- `parteiID_spd`, `parteiID_cducsu`, `parteiID_fdp`: 1977–2022  
+- `parteiID_gruene`: 1982–2022  
+- `parteiID_linke`: 1991–2022  
+- `parteiID_afd`: 2016–2022
+
+**Antwort-Codes:**  
+- `1` = Parteineigung zur jeweiligen Partei  
+- `0` = Parteineigung zu anderer Partei / keine Parteineigung  
+- `NA` = keine Angabe / nicht erhoben
+
+**Hinweis:**  
+Die Variablen sind Dummy-Codierungen basierend auf der Nennung einer Parteineigung in `parteineigung`. Sie ermöglichen eine vereinfachte parteispezifische Analyse. Für die vollständige Liste der Parteien siehe `parteineigung` (`v72`).
+
+
+## `skalom_spd`, `skalom_cdu`, `skalom_csu`, `skalom_fdp`, `skalom_gruene`, `skalom_pds`, `skalom_republikaner_afd`, `skalom_regierung` (alle aus `v8`, `v9`, …)
+
+**Fragetext/Inhalt:**  
+Was halten Sie von der folgenden Partei bzw. Institution? Bitte bewerten Sie Ihre Meinung anhand einer Skala.  
+Die genaue Skalenform und Wortlaut der Frage variierten über die Jahre, typischerweise aber:
+
+> *„Stellen Sie sich ein Thermometer von +5 bis −5 vor. +5 bedeutet, dass Sie sehr viel von der Partei halten, −5 bedeutet, dass Sie überhaupt nichts von ihr halten.“*
+
+**Verfügbare Jahre:**  
+- `skalom_spd`, `skalom_cdu`, `skalom_csu`, `skalom_fdp`: 1977–2022  
+- `skalom_gruene`: 1979–2022  
+- `skalom_pds`: 1990–2022  
+- `skalom_republikaner_afd`: 1989–1990, 1992–1994, 2013–2022  
+- `skalom_regierung`: 1977–2022
+
+**Antwort-Codes:**  
+- `1` = −5 (überhaupt nichts / sehr unzufrieden)  
+- `2` = −4  
+- `3` = −3  
+- `4` = −2  
+- `5` = −1  
+- `6` =  0  
+- `7` = +1  
+- `8` = +2  
+- `9` = +3  
+- `10` = +4  
+- `11` = +5 (sehr viel / sehr zufrieden)  
+- `NA` = keine Angabe / nicht erhoben
+
+
+## `skalom_regierung` (`v15`)
+
+**Fragetext/Inhalt:**  
+Wie zufrieden oder unzufrieden sind Sie mit den Leistungen der Bundesregierung?  
+*(Die genaue Frageformulierung und Bezug auf die jeweilige Regierungskoalition variierte je nach Jahr, Regierung und Region – z. B. SPD/FDP, CDU/CSU-FDP, CDU/CSU-SPD, SPD/Grüne, SPD/Grüne/FDP. Auch die verwendete Skala war unterschiedlich (Thermometer, Notenskala, Punktevergabe), wurde jedoch einheitlich in eine Skala von −5 bis +5 überführt.)*
+
+**Verfügbare Jahre:**  
+1977–2022
+
+**Antwort-Codes:**  
+- `1` = −5 (sehr unzufrieden)  
+- `2` = −4  
+- `3` = −3  
+- `4` = −2  
+- `5` = −1  
+- `6` =  0  
+- `7` = +1  
+- `8` = +2  
+- `9` = +3  
+- `10` = +4  
+- `11` = +5 (sehr zufrieden)  
+- `NA` = keine Angabe / nicht erhoben
+
+## `skalom_opposition` (`v16`)
+
+**Fragetext/Inhalt:**  
+Wie zufrieden oder unzufrieden sind Sie mit den Leistungen der Opposition in Bonn bzw. Berlin?  
+*(Die genaue Frageformulierung variierte abhängig davon, welche Partei in der Opposition war – z. B. CDU/CSU, SPD, FDP, Grüne oder Die Linke. Auch die verwendete Skala variierte, wurde jedoch für Vergleichbarkeit auf eine Skala von −5 bis +5 standardisiert.)*
+
+**Verfügbare Jahre:**  
+1977–2013
+
+**Antwort-Codes:**  
+- `1` = −5 (sehr unzufrieden)  
+- `2` = −4  
+- `3` = −3  
+- `4` = −2  
+- `5` = −1  
+- `6` =  0  
+- `7` = +1  
+- `8` = +2  
+- `9` = +3  
+- `10` = +4  
+- `11` = +5 (sehr zufrieden)  
+- `NA` = keine Angabe / nicht erhoben
+
+**Hinweis:**  
+Die Bewertung bezieht sich auf die jeweils größte Oppositionspartei oder -parteien zur Zeit der Befragung. Durch wechselnde Regierungskoalitionen ist eine genaue Interpretation nur unter Einbezug des Erhebungszeitpunkts sinnvoll.
+
+## `skalom_gruene_opposition` (`v17`)
+
+**Fragetext/Inhalt:**  
+Wie zufrieden oder unzufrieden sind Sie mit den Leistungen der kleineren Oppositionspartei in Bonn bzw. Berlin?  
+*(Je nach Jahr wurde konkret nach den Grünen oder nach der FDP gefragt. Die genaue Frageformulierung variierte leicht, insbesondere zwischen 1983 und 2005.)*
+
+**Verfügbare Jahre:**  
+1983–1990, 1995, 1996–2017
+
+**Antwort-Codes:**  
+- `1` = −5 (sehr unzufrieden)  
+- `2` = −4  
+- `3` = −3  
+- `4` = −2  
+- `5` = −1  
+- `6` =  0  
+- `7` = +1  
+- `8` = +2  
+- `9` = +3  
+- `10` = +4  
+- `11` = +5 (sehr zufrieden)  
+- `NA` = keine Angabe / nicht erhoben
+
+**Hinweis:**  
+Die Variable misst die Zufriedenheit mit dem "kleinen Oppositionspartner". Zwischen 1998 und 2005 wurde dafür zeitweise die FDP abgefragt, in den übrigen Jahren überwiegend die Grünen. Die Skala wurde zur Vergleichbarkeit normiert.
+
+
+## `demokratiezufriedenheit` (`v18`)
+
+**Fragetext/Inhalt:**  
+Was würden Sie allgemein zur Demokratie in der Bundesrepublik / in Deutschland sagen? Sind Sie damit …  
+*(Bis 1992 im Westen bezogen auf die „Demokratie in der Bundesrepublik“, ab 1993 allgemein auf „Deutschland“ bezogen. Die Zahl der Antwortkategorien wurde 1989 reduziert.)*
+
+**Verfügbare Jahre:**  
+1977–2022
+
+**Antwort-Codes:**  
+- `1` = (sehr) zufrieden  
+- `0` = (eher) unzufrieden  
+- `NA` = keine Angabe / nicht erhoben
+
+**Hinweis:**  
+Die ursprüngliche Skala umfasste von 1977 bis 1988 vier Antwortkategorien (z. B. „sehr zufrieden“, „eher zufrieden“, „eher unzufrieden“, „sehr unzufrieden“), wurde aber ab 1989 auf zwei Kategorien reduziert. Für die vorliegende Variable wurden beide Skalenformen harmonisiert.
+
+
+## `vertrauen_fuehrungspersonal` (`v19`)
+
+**Fragetext/Inhalt:**  
+Glauben Sie, dass heute bei uns in der Bundesrepublik / in Deutschland im Großen und Ganzen die richtigen Leute in den führenden Stellungen sind – oder glauben Sie das nicht?  
+*(Der genaue Wortlaut variierte leicht über die Jahre. In manchen Jahren wurde explizit zwischen Politik und Wirtschaft unterschieden, meist aber allgemein nach „den führenden Positionen“ gefragt.)*
+
+**Verfügbare Jahre:**  
+1977–2011, 2017
+
+**Antwort-Codes:**  
+- `1` = ja  
+- `2` = nein  
+- `NA` = keine Angabe / nicht erhoben
+
+
+## `politikinteresse` (`v20`)
+
+**Fragetext/Inhalt:**  
+Einmal ganz allgemein gesprochen – interessieren Sie sich für Politik?
+
+**Verfügbare Jahre:**  
+1977, 1980, 1981–1983, 1986, 1987, 1991
+
+**Antwort-Codes:**  
+- `1` = ja  
+- `2` = nicht besonders  
+- `3` = gar nicht  
+- `NA` = keine Angabe / nicht erhoben
+
+
+
+## `politikinteresse_staerke` (`v21`)
+
+**Fragetext/Inhalt:**  
+(Falls sich die/der Befragte für Politik interessiert:) Wie stark interessieren Sie sich für Politik?  
+*(Ab 1992 wurde die Vorfrage zum generellen Politikinteresse nicht mehr gestellt. Die Antwortkategorien wurden daher erweitert und ohne Filterung erhoben.)*
+
+**Verfügbare Jahre:**  
+1977, 1980, 1981–1983, 1986, 1987, 1990, 1991–2022
+
+**Antwort-Codes:**  
+- `1` = sehr stark / stark  
+- `0` = nicht so stark / etwas / kaum  
+- `NA` = keine Angabe / nicht erhoben / Vorfrage negativ
+
+
+## `links_rechts` (`v22`)
+
+**Fragetext/Inhalt:**  
+Wenn von Politik die Rede ist, hört man immer wieder die Begriffe „links“ und „rechts“. Wo würden Sie sich selbst auf dieser Skala einstufen?  
+*(Die genaue Formulierung variierte über die Jahre.)*
+
+**Verfügbare Jahre:**  
+1980, 1982, 1983, 1987, 1988, 1997–2022
+
+**Antwort-Codes:**  
+- `1` = 0 (sehr links)  
+- `2` = 1  
+- `3` = 2  
+- `4` = 3  
+- `5` = 4  
+- `6` = 5 (Mitte)  
+- `7` = 6  
+- `8` = 7  
+- `9` = 8  
+- `10` = 9  
+- `11` = 10 (sehr rechts)  
+- `NA` = keine Angabe / nicht erhoben
+
+
+## `links_rechts_harmonisiert` (aus `v22`)
+
+**Fragetext/Inhalt:**  
+Wenn von Politik die Rede ist, hört man immer wieder die Begriffe „links“ und „rechts“. Wo würden Sie sich selbst auf dieser Skala einstufen?  
+
+**Verfügbare Jahre:**  
+1980, 1982, 1983, 1987–2022
+
+**Antwort-Codes:**  
+- `0` = eher links  
+- `1` = Mitte  
+- `2` = eher rechts  
+- `NA` = keine Angabe / nicht erhoben
